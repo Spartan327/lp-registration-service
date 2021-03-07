@@ -1,1 +1,3 @@
 env/
+app/cofig.py
+create_db.py
