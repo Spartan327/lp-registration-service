@@ -88,8 +88,14 @@ class Correction(db.Model):
     status = db.Column(db.Enum(CorrectionType))
     duration = db.Column(db.Integer, nullable = False)
 
+    def __repr__(self):
+        return f'<Correction {self.worker_id} {self.start_time} {self.status}>'
+
 class Shedule(db.Model):
     __tablename__ = 'shedules'
     worker_id = db.Column(db.Integer, db.ForeignKey('workers.id'), primary_key=True, nullable = False)
     start_time = db.Column(db.Integer, primary_key=True, nullable = False)
     duration = db.Column(db.Integer, nullable = False)
+
+    def __repr__(self):
+        return f'<Shedule {self.worker_id} {self.start_time}>'
