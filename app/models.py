@@ -4,18 +4,23 @@ import enum
 db = SQLAlchemy()
 
 class RecordType(enum.Enum):
-    CONFIRMED = "Confimed"
-    UNCONFIRMED = "Unconfimed"
+    CONFIRMED = "confimed"
+    UNCONFIRMED = "unconfimed"
 
 class CorrectionType(enum.Enum):
-    UNWORK = "Unwork"
-    WORK = "Work"
+    UNWORK = "unwork"
+    WORK = "work"
+
+class Gender(enum.Enum):
+    M = "male"
+    F = "female"
 
 class Client(db.Model):
     __tablename__ = 'clients'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.String(50), nullable = False)
     lastname = db.Column(db.String(50), nullable = True)
+    sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
     phone = db.Column(db.String(15), nullable = False, unique = True)
     email = db.Column(db.String(150), nullable = True, unique = True)
@@ -33,6 +38,7 @@ class Worker(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.String(50), nullable = False)
     lastname = db.Column(db.String(50), nullable = True)
+    sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
     phone = db.Column(db.String(15), nullable = False, unique = True)
     email = db.Column(db.String(150), nullable = True, unique = True)
@@ -60,6 +66,7 @@ class Administrator(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.String(50), nullable = False)
     lastname = db.Column(db.String(50), nullable = True)
+    sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
     phone = db.Column(db.String(15), nullable = False, unique = True)
     email = db.Column(db.String(150), nullable = True, unique = True)

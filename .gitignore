@@ -1,6 +1,5 @@
 env/
 .env
-create_db.py
 .pyc
  app/__pycache__/
-__pycache__
+scripts/__pycache__

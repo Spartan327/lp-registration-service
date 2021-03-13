@@ -1,0 +1,15 @@
+{
+    "clients":[      
+        {"firstname":"Tom", "lastname":"Jackson", "phone":"890090000", "email":"TomJ@mail.ru", "birthday":"02.01.2000" , "sex":"M"},
+        {"firstname":"Linda", "lastname":"Garner", "phone":"880080000", "email":"LindaG@mail.ru", "birthday":"02.04.2000", "sex":"F"},
+        {"firstname":"Jony", "lastname":"Silverhand", "phone":"870070000", "email":"JonyS@mail.ru", "birthday":"01.07.2000", "sex":"M"}
+    ],
+    "workers":[
+        {"firstname":"Garry", "lastname":"Smit", "phone":"890090001", "email":"GarryS@mail.ru", "birthday":"02.01.2001" , "sex":"M"},
+        {"firstname":"Kate", "lastname":"Trump", "phone":"880080001", "email":"KateT@mail.ru", "birthday":"02.04.2001", "sex":"F"},
+        {"firstname":"Adam", "lastname":"Smasher", "phone":"870070001", "email":"AdamS@mail.ru", "birthday":"01.07.2001", "sex":"M"}
+    ],
+    "administrators":[
+        {"firstname":"Viktor", "lastname":"Butovchenko", "phone":"89607598176", "email":"Vbutovchenko@mail.ru", "birthday":"02.12.1992" , "sex":"M"}
+        ]
+}
