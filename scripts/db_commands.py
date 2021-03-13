@@ -15,26 +15,27 @@ def create_db():
 def delete_db():
     db.drop_all(app=app)
 
-def save_items(items, MyClass):
-    for item in items:
-        new_item = MyClass(
-            firstname = item['firstname'], 
-            lastname = item['lastname'],
-            sex = item['sex'],
-            birthday = datetime.strptime(item['birthday'], '%d.%m.%Y').date(),
-            phone = item['phone'],
-            email = item['email']
+def save_users(users, UserClass):
+    for user in users:
+        new_user = UserClass(
+            firstname = user['firstname'], 
+            lastname = user['lastname'],
+            sex = user['sex'],
+            birthday = datetime.strptime(user['birthday'], '%d.%m.%Y').date(),
+            phone = user['phone'],
+            email = user['email']
             )
-        db.session.add(new_item)
+        db.session.add(new_user)
         db.session.commit()
 
 def add_data():
-    clients = get_data('clients')
-    workers = get_data('workers')
-    administrators = get_data('administrators')
-    save_items(clients, Client)
-    save_items(workers, Worker)
-    save_items(administrators, Administrator)
+    all_data = get_data()
+    clients = all_data['clients']
+    workers = all_data['workers']
+    administrators = all_data['administrators']
+    save_users(clients, Client)
+    save_users(workers, Worker)
+    save_users(administrators, Administrator)
     
 if __name__ == "__main__":
     delete_db()
