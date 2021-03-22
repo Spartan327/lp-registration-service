@@ -1,5 +1,9 @@
 from flask import Flask, render_template
+
+from app.forms import LoginForm
 from app.models import db
+
+
 
 def create_app():
     app = Flask(__name__)
@@ -18,4 +22,9 @@ def create_app():
     def internal_server_error(e):
         return render_template('500.html'), 500
     
+    @app.route('/login')
+    def login():
+        title = 'Авторизация'
+        login_form = LoginForm()
+        return render_template('login.html', page_title = title, form = login_form)
     return app
