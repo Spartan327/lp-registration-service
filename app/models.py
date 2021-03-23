@@ -1,4 +1,7 @@
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
 import enum
 
 db = SQLAlchemy()
@@ -15,10 +18,12 @@ class Gender(enum.Enum):
     M = "male"
     F = "female"
 
-class Client(db.Model):
+class Client(db.Model, UserMixin):
     __tablename__ = 'clients'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    firstname = db.Column(db.String(50), nullable = False)
+    username = db.Column(db.String(60), index = True, unique = True, nullable = False)
+    password = db.Column(db.String(128))
+    firstname = db.Column(db.String(50), nullable = True)
     lastname = db.Column(db.String(50), nullable = True)
     sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
@@ -30,8 +35,14 @@ class Client(db.Model):
         lazy = 'dynamic'
         )
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
     def __repr__(self):
-        return f'<Client {self.firstname} {self.lastname} {self.telephone}>'
+        return f'<Client {self.username}>'
 
 class Worker(db.Model):
     __tablename__ = 'workers'

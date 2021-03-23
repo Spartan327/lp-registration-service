@@ -40,5 +40,5 @@ def add_data():
 if __name__ == "__main__":
     delete_db()
     create_db()
-    with app.app_context():
-        add_data()
+    #with app.app_context():
+    #    add_data()
