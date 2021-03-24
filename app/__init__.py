@@ -37,7 +37,7 @@ def create_app():
             return redirect(url_for('index'))
         title = 'Авторизация'
         login_form = LoginForm()
-        return render_template('login.html', page_title = title, form = login_form)
+        return render_template('login.html', page_title = title, form = login_form, current_user = current_user)
     
     @app.route('/process-login', methods = ['POST'])
     def process_login():
