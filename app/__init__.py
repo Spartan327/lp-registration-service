@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for
-from flask_login import LoginManager, login_user, logout_user
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
 from app.forms import LoginForm
 from app.models import db, Client, Administrator
@@ -33,6 +33,8 @@ def create_app():
     
     @app.route('/login')
     def login():
+        if current_user.is_authenticated:
+            return redirect(url_for('index'))
         title = 'Авторизация'
         login_form = LoginForm()
         return render_template('login.html', page_title = title, form = login_form)
@@ -57,5 +59,10 @@ def create_app():
         flash('Вы успешно разлогинились')
         return redirect(url_for('index'))
 
+    @app.route('/admin')
+    @login_required
+    def admin_index():
+        
+        return 'Привет админ'
 
     return app

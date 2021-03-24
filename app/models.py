@@ -11,8 +11,8 @@ class RecordType(enum.Enum):
     UNCONFIRMED = "unconfimed"
 
 class CorrectionType(enum.Enum):
-    UNWORK = "unwork"
-    WORK = "work"
+    DOWNTIME = "worker unavailable"
+    EXTRA_HOURS = "worker available"
 
 class Gender(enum.Enum):
     M = "male"
@@ -63,8 +63,8 @@ class Worker(db.Model):
         backref =  db.backref('worker', lazy = 'joined'),
         lazy = 'dynamic'
         )
-    shedules = db.relationship(
-        'Shedule', 
+    schedules = db.relationship(
+        'Schedule', 
         backref =  db.backref('worker', lazy = 'joined'),
         lazy = 'dynamic'
         )
@@ -109,8 +109,8 @@ class Correction(db.Model):
     def __repr__(self):
         return f'<Correction {self.worker_id} {self.start_time} {self.status}>'
 
-class Shedule(db.Model):
-    __tablename__ = 'shedules'
+class Schedule(db.Model):
+    __tablename__ = 'schedules'
     worker_id = db.Column(db.Integer, db.ForeignKey('workers.id'), primary_key=True, nullable = False)
     start_time = db.Column(db.Integer, primary_key=True, nullable = False)
     duration = db.Column(db.Integer, nullable = False)

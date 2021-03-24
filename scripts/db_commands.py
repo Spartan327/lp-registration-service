@@ -15,9 +15,9 @@ def create_db():
 def delete_db():
     db.drop_all(app=app)
 
-def save_users(users, UserClass):
+def save_users(users, user_class):
     for user in users:
-        new_user = UserClass(
+        new_user = user_class(
             firstname = user['firstname'], 
             lastname = user['lastname'],
             sex = user['sex'],
