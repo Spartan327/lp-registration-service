@@ -1,21 +1,31 @@
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
 import enum
 
 db = SQLAlchemy()
 
 class RecordType(enum.Enum):
-    CONFIRMED = "Confimed"
-    UNCONFIRMED = "Unconfimed"
+    CONFIRMED = "confimed"
+    UNCONFIRMED = "unconfimed"
 
 class CorrectionType(enum.Enum):
-    UNWORK = "Unwork"
-    WORK = "Work"
+    DOWNTIME = "worker unavailable"
+    EXTRA_HOURS = "worker available"
 
-class Client(db.Model):
+class Gender(enum.Enum):
+    M = "male"
+    F = "female"
+
+class Client(db.Model, UserMixin):
     __tablename__ = 'clients'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    firstname = db.Column(db.String(50), nullable = False)
+    username = db.Column(db.String(60), index = True, unique = True, nullable = False)
+    password = db.Column(db.String(128))
+    firstname = db.Column(db.String(50), nullable = True)
     lastname = db.Column(db.String(50), nullable = True)
+    sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
     phone = db.Column(db.String(15), nullable = False, unique = True)
     email = db.Column(db.String(150), nullable = True, unique = True)
@@ -25,14 +35,21 @@ class Client(db.Model):
         lazy = 'dynamic'
         )
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
     def __repr__(self):
-        return f'<Client {self.firstname} {self.lastname} {self.telephone}>'
+        return f'<Client {self.username}>'
 
 class Worker(db.Model):
     __tablename__ = 'workers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.String(50), nullable = False)
     lastname = db.Column(db.String(50), nullable = True)
+    sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
     phone = db.Column(db.String(15), nullable = False, unique = True)
     email = db.Column(db.String(150), nullable = True, unique = True)
@@ -46,8 +63,8 @@ class Worker(db.Model):
         backref =  db.backref('worker', lazy = 'joined'),
         lazy = 'dynamic'
         )
-    shedules = db.relationship(
-        'Shedule', 
+    schedules = db.relationship(
+        'Schedule', 
         backref =  db.backref('worker', lazy = 'joined'),
         lazy = 'dynamic'
         )
@@ -60,6 +77,7 @@ class Administrator(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.String(50), nullable = False)
     lastname = db.Column(db.String(50), nullable = True)
+    sex = db.Column(db.Enum(Gender), nullable = True)
     birthday = db.Column(db.Date, nullable = True)
     phone = db.Column(db.String(15), nullable = False, unique = True)
     email = db.Column(db.String(150), nullable = True, unique = True)
@@ -91,8 +109,8 @@ class Correction(db.Model):
     def __repr__(self):
         return f'<Correction {self.worker_id} {self.start_time} {self.status}>'
 
-class Shedule(db.Model):
-    __tablename__ = 'shedules'
+class Schedule(db.Model):
+    __tablename__ = 'schedules'
     worker_id = db.Column(db.Integer, db.ForeignKey('workers.id'), primary_key=True, nullable = False)
     start_time = db.Column(db.Integer, primary_key=True, nullable = False)
     duration = db.Column(db.Integer, nullable = False)
