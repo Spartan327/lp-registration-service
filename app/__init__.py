@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
 from app.forms import LoginForm
-from app.models import db, Client, Administrator
+from app.models import db, Client
 
 
 def create_app():
@@ -30,16 +30,16 @@ def create_app():
     @app.errorhandler(500)
     def internal_server_error(e):
         return render_template('500.html'), 500
-    
+
     @app.route('/login')
     def login():
         if current_user.is_authenticated:
             return redirect(url_for('index'))
         title = 'Авторизация'
         login_form = LoginForm()
-        return render_template('login.html', page_title = title, form = login_form, current_user = current_user)
-    
-    @app.route('/process-login', methods = ['POST'])
+        return render_template('login.html', page_title=title, form=login_form, current_user=current_user)
+
+    @app.route('/process-login', methods=['POST'])
     def process_login():
         form = LoginForm()
 
@@ -62,7 +62,7 @@ def create_app():
     @app.route('/admin')
     @login_required
     def admin_index():
-        
+
         return 'Привет админ'
 
     return app
