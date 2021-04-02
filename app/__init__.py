@@ -18,7 +18,6 @@ def create_app():
     def load_user(user_id):
         return Client.query.get(user_id)
 
-
     @app.route('/')
     def index():
         return render_template('index.html')

@@ -1,15 +1,34 @@
 {
     "clients":[      
-        {"firstname":"Tom", "lastname":"Jackson", "phone":"890090000", "email":"TomJ@mail.ru", "birthday":"02.01.2000" , "sex":"M"},
-        {"firstname":"Linda", "lastname":"Garner", "phone":"880080000", "email":"LindaG@mail.ru", "birthday":"02.04.2000", "sex":"F"},
-        {"firstname":"Jony", "lastname":"Silverhand", "phone":"870070000", "email":"JonyS@mail.ru", "birthday":"01.07.2000", "sex":"M"}
+        {"firstname":"Tom", "lastname":"Jackson", "phone":"890090000", "email":"TomJ@mail.ru", "birthday":"02.01.2000" , "sex":"M", "username": "TomJ", "password": "12345"},
+        {"firstname":"Linda", "lastname":"Garner", "phone":"880080000", "email":"LindaG@mail.ru", "birthday":"02.04.2000", "sex":"F", "username": "LindaG", "password": "12345"},
+        {"firstname":"Jony", "lastname":"Silverhand", "phone":"870070000", "email":"JonyS@mail.ru", "birthday":"01.07.2000", "sex":"M", "username": "JonyS", "password": "12345"}
     ],
     "workers":[
-        {"firstname":"Garry", "lastname":"Smit", "phone":"890090001", "email":"GarryS@mail.ru", "birthday":"02.01.2001" , "sex":"M"},
-        {"firstname":"Kate", "lastname":"Trump", "phone":"880080001", "email":"KateT@mail.ru", "birthday":"02.04.2001", "sex":"F"},
-        {"firstname":"Adam", "lastname":"Smasher", "phone":"870070001", "email":"AdamS@mail.ru", "birthday":"01.07.2001", "sex":"M"}
+        {"firstname":"Garry", "lastname":"Smit", "phone":"890090001", "email":"GarryS@mail.ru", "birthday":"02.01.2001" , "sex":"M", "username": "GarryS"},
+        {"firstname":"Kate", "lastname":"Trump", "phone":"880080001", "email":"KateT@mail.ru", "birthday":"02.04.2001", "sex":"F", "username": "KateT"},
+        {"firstname":"Adam", "lastname":"Smasher", "phone":"870070001", "email":"AdamS@mail.ru", "birthday":"01.07.2001", "sex":"M", "username": "AdamS"}
     ],
     "administrators":[
         {"firstname":"Viktor", "lastname":"Butovchenko", "phone":"89607598176", "email":"Vbutovchenko@mail.ru", "birthday":"02.12.1992" , "sex":"M"}
-        ]
+    ],
+    "records":[
+        {"client_id": "1", "worker_id": "1", "published": "01.04.2021 12:01:31", "duration": "899" , "start_time": "15.04.2021 12:30:00"},
+        {"client_id": "1", "worker_id": "1", "published": "01.04.2021 12:02:31", "duration": "899" , "start_time": "15.04.2021 13:00:00"},
+        {"client_id": "1", "worker_id": "2", "published": "01.04.2021 12:03:31", "duration": "899" , "start_time": "15.04.2021 12:00:00"}
+    ],
+    "corrections":[
+        {"worker_id": "1", "start_time":"15.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"},
+        {"worker_id": "1", "start_time":"16.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"},
+        {"worker_id": "1", "start_time":"17.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"},
+        {"worker_id": "1", "start_time":"18.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"},
+        {"worker_id": "1", "start_time":"19.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"}
+    ],
+    "schedules":[
+        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800"},
+        {"worker_id": "1", "start_time":"115200", "duration": "32400", "duration_window": "1800"},
+        {"worker_id": "1", "start_time":"201600", "duration": "32400", "duration_window": "1800"},
+        {"worker_id": "1", "start_time":"288000", "duration": "32400", "duration_window": "1800"},
+        {"worker_id": "1", "start_time":"374400", "duration": "32400", "duration_window": "1800"}
+    ]
 }

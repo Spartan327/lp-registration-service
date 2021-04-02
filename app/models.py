@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 import enum
 
@@ -52,6 +53,7 @@ class Client(db.Model, UserMixin):
 class Worker(db.Model):
     __tablename__ = 'workers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(60), index=True, unique=True, nullable=False)
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=True)
     sex = db.Column(db.Enum(Gender), nullable=True)
@@ -98,10 +100,13 @@ class Record(db.Model):
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('workers.id'), nullable=False)
     text = db.Column(db.Text, nullable=True)
-    published = db.Column(db.DateTime, nullable=False) 
+    published = db.Column(db.DateTime, nullable=False)
     start_time = db.Column(db.TIMESTAMP, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.Enum(RecordType))
+    status = db.Column(db.Enum(RecordType), nullable=True)
+
+    def set_start_time(self, datetime_str):
+        self.start_time = datetime.strptime(datetime_str, '%d.%m.%Y %H:%M:%S')
 
     def __repr__(self):
         return f'<Record {self.user_id} {self.text}>'
@@ -113,6 +118,9 @@ class Correction(db.Model):
     start_time = db.Column(db.TIMESTAMP, primary_key=True, nullable=False)
     status = db.Column(db.Enum(CorrectionType))
     duration = db.Column(db.Integer, nullable=False)
+
+    def set_start_time(self, datetime_str):
+        self.start_time = datetime.strptime(datetime_str, '%d.%m.%Y %H:%M:%S')
 
     def __repr__(self):
         return f'<Correction {self.worker_id} {self.start_time} {self.status}>'
