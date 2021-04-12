@@ -5,7 +5,24 @@
 {% block page_content %}
     
     <div class="page-header">
-        <h1>Прототип приложения "Запись на услугу"</h1>
-        <h1>Привет {{ current_user.name }}</h1>
+        <h1>Привет {{ current_user.username }}</h1>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <form action="{{ url_for('check_date') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.date.label }}
+                    {{ form.date() }}
+                </div>
+                {{ form.submit }}
+            </form>
+            {% if current_user.username %}
+                <h6>Вы записаны на следующее время:</h6>
+            {% endif %}
+            {% for record in records %}
+                <ul>{{ record.start_time }}</ul>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

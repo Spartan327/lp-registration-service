@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Запись на услугу{% endblock %}
+
+{% block page_content %}
+    
+    <div class="page-header">
+        <h1>Привет {{ current_user.username }}</h1>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <h6>На {{ date }} имеются свободные записи:</h6>
+            {% for sdate in date_schedule %}
+                <ul>{{ sdate.get_time() }}</ul>
+            {% endfor %}
+            <h6>Имеются корректировки:</h6>
+            {% for cdate in date_correction %}
+                <ul>{{ cdate.start_time.time() }} {{ cdate.status.name }}</ul>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

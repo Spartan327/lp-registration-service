@@ -1,8 +1,9 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from datetime import datetime, timedelta
+from flask import Flask, render_template, flash, redirect, request, url_for
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
-from app.forms import LoginForm
-from app.models import db, Client
+from app.forms import LoginForm, FilterForm
+from app.models import db, Client, Schedule, Record, Correction
 
 
 def create_app():
@@ -20,7 +21,23 @@ def create_app():
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+        filter_form = FilterForm()
+        if current_user.is_authenticated:
+            user_id = Client.query.filter(Client.username == current_user.username).first().id
+            records_client = Record.query.filter_by(client_id=user_id).order_by(Record.start_time).all()
+            return render_template('index.html', records=records_client, form=filter_form)
+        return render_template('index.html', form=filter_form)
+
+    @app.route('/check-date', methods=['POST'])
+    def check_date():
+        form = FilterForm()
+        if form.validate_on_submit():
+            date = request.form['date']
+            date = datetime.strptime(date, '%Y-%m-%d')
+            date_schedule = Schedule.query.filter_by(week_day=date.isoweekday()).order_by(Schedule.start_time).all()
+            date_correction = Correction.query.filter(Correction.start_time >= date).\
+                filter(Correction.start_time <= date + timedelta(days=1)).all()
+            return render_template('check_date.html', date_schedule=date_schedule, date_correction=date_correction, date=date)
 
     @app.errorhandler(404)
     def page_not_found(e):
@@ -41,7 +58,6 @@ def create_app():
     @app.route('/process-login', methods=['POST'])
     def process_login():
         form = LoginForm()
-
         if form.validate_on_submit():
             user = Client.query.filter(Client.username == form.username.data).first()
             if user and user.check_password(form.password.data):
@@ -57,11 +73,5 @@ def create_app():
         logout_user()
         flash('Вы успешно разлогинились')
         return redirect(url_for('index'))
-
-    @app.route('/admin')
-    @login_required
-    def admin_index():
-
-        return 'Привет админ'
 
     return app
