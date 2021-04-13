@@ -1,0 +1,8 @@
+Выполните следующие команды для linux
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+перезапустите терминал, возможно потребуется перезагрузить компьютер
+
+sudo apt-get update
+sudo apt-get install build-essential python3-dev
+sudo apt install libpq-dev python3-dev
+poetry install

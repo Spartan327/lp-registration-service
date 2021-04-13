@@ -13,9 +13,9 @@
         {"firstname":"Viktor", "lastname":"Butovchenko", "phone":"89607598176", "email":"Vbutovchenko@mail.ru", "birthday":"02.12.1992" , "sex":"M"}
     ],
     "records":[
-        {"client_id": "1", "worker_id": "1", "published": "01.04.2021 12:01:31", "duration": "899" , "start_time": "15.04.2021 12:30:00"},
-        {"client_id": "1", "worker_id": "1", "published": "01.04.2021 12:02:31", "duration": "899" , "start_time": "15.04.2021 13:00:00"},
-        {"client_id": "1", "worker_id": "2", "published": "01.04.2021 12:03:31", "duration": "899" , "start_time": "15.04.2021 12:00:00"}
+        {"client_id": "1", "worker_id": "1", "published": "01.04.2021 12:01:31", "duration": "1800" , "start_time": "15.04.2021 10:30:00"},
+        {"client_id": "2", "worker_id": "1", "published": "01.04.2021 12:02:31", "duration": "1800" , "start_time": "15.04.2021 13:00:00"},
+        {"client_id": "3", "worker_id": "1", "published": "01.04.2021 12:03:31", "duration": "1800" , "start_time": "15.04.2021 08:00:00"}
     ],
     "corrections":[
         {"worker_id": "1", "start_time":"15.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"},
@@ -25,10 +25,10 @@
         {"worker_id": "1", "start_time":"19.04.2021 14:00:00", "duration": "3600", "status": "DOWNTIME"}
     ],
     "schedules":[
-        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800"},
-        {"worker_id": "1", "start_time":"115200", "duration": "32400", "duration_window": "1800"},
-        {"worker_id": "1", "start_time":"201600", "duration": "32400", "duration_window": "1800"},
-        {"worker_id": "1", "start_time":"288000", "duration": "32400", "duration_window": "1800"},
-        {"worker_id": "1", "start_time":"374400", "duration": "32400", "duration_window": "1800"}
+        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800", "weekday": "1"},
+        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800", "weekday": "2"},
+        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800", "weekday": "3"},
+        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800", "weekday": "4"},
+        {"worker_id": "1", "start_time":"28800", "duration": "32400", "duration_window": "1800", "weekday": "5"}
     ]
 }

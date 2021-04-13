@@ -12,3 +12,7 @@ class LoginForm(FlaskForm):
 class FilterForm(FlaskForm):
     date = DateField('Выберете дату для записи', validators=[DataRequired()], format='%Y-%m-%d')
     submit = SubmitField('Найти свободные записи', render_kw={"class": "btn btn-primary"})
+
+
+class ChooseRecordForm(FlaskForm):
+    submit = SubmitField('Записаться', render_kw={"class": "btn btn-primary"})

@@ -10,12 +10,20 @@
     <div class="row">
         <div class="col-4">
             <h6>На {{ date }} имеются свободные записи:</h6>
-            {% for sdate in date_schedule %}
-                <ul>{{ sdate.get_time() }}</ul>
+            {% for date_schedule in date_schedules %}
+                <ul>{{ date_schedule.get_time() }}</ul>
+                <form action="{{ url_for('process_add_record', schedule_start_time=date_schedule.start_time, schedule_worker=date_schedule.worker_id, date=date) }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit }}
+                </form>
             {% endfor %}
             <h6>Имеются корректировки:</h6>
-            {% for cdate in date_correction %}
-                <ul>{{ cdate.start_time.time() }} {{ cdate.status.name }}</ul>
+            {% for date_correction in date_corrections %}
+                <ul>Время начала корректировки {{ date_correction.start_time.time() }} тип {{ date_correction.status.value }} Продолжительность {{ date_correction.duration/60 }} минут</ul>
+            {% endfor %}
+            <h6>Имеются записи:</h6>
+            {% for date_record in date_records %}
+                <ul> {{ date_record.start_time.time() }} клиент {{ date_record.client_id }}</ul>
             {% endfor %}
         </div>
     </div>

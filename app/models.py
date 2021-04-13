@@ -134,7 +134,7 @@ class Schedule(db.Model):
     worker_id = db.Column(db.Integer, db.ForeignKey('workers.id'), primary_key=True, nullable=False)
     start_time = db.Column(db.Integer, primary_key=True, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    week_day = db.Column(db.Integer, nullable=False)
+    week_day = db.Column(db.Integer, primary_key=True, nullable=False)
 
     def set_week_day(self, start_time):
         if 0 <= start_time < 86400:
@@ -153,7 +153,10 @@ class Schedule(db.Model):
             self.week_day = 7
 
     def get_time(self):
-        return timedelta(seconds=self.start_time)
+        return (datetime.min + timedelta(seconds=self.start_time)).time()
+
+    def get_time_with_duration(self):
+        return (datetime.min + timedelta(seconds=(self.start_time + self.duration))).time()
 
     def __repr__(self):
         return f'<Shedule {self.worker_id} {self.start_time}>'

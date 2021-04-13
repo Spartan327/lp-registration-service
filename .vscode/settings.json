@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "c:\\Users\\Tina Babayanovna\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\registration-services-nWq2rPfO-py3.8\\Scripts\\python.exe",
+    "python.pythonPath": "/home/spartan327/.cache/pypoetry/virtualenvs/registration-services-fdWqzAVQ-py3.8/bin/python3.8",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true

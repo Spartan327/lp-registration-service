@@ -55,9 +55,9 @@ def save_schedules(schedules):
             new_schedule = Schedule(
                 worker_id=schedule['worker_id'],
                 start_time=time_window_schedule,
-                duration=schedule['duration_window']
+                duration=schedule['duration_window'],
+                week_day=schedule['weekday']
             )
-            new_schedule.set_week_day(time_window_schedule)
             db.session.add(new_schedule)
             db.session.commit()
 
