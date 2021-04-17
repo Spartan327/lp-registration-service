@@ -3,11 +3,35 @@
 {% block title %}Запись на услугу{% endblock %}
 
 {% block page_content %}
-    
-    <div class="page-header">
-        <h1>Привет {{ current_user.username }}</h1>
-    </div>
     <div class="row">
+        <div class="col-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">Пн</th>
+                      <th scope="col">Вт</th>
+                      <th scope="col">Ср</th>
+                      <th scope="col">Чт</th>
+                      <th scope="col">Пт</th>
+                      <th scope="col">Сб</th>
+                      <th scope="col">Вс</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for week in month %}
+                        <tr>
+                        {% for day in week %}
+                            {% if day.isoweekday() <= 5 and day >= current_date %}
+                                <td><a class="btn btn-primary" href="{{ url_for('check_date', day=day) }}" role="button" style="display:block;width:60px">{{ day.day }}</a></td>
+                            {% else %}
+                                <td><a class="btn btn-primary disabled" tabindex="-1" href="#" role="button" style="display:block;width:60px" aria-disabled="true">{{ day.day }}</a></td>    
+                            {% endif%}    
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <div class="col-4">
             <form action="{{ url_for('check_date') }}" method="POST">
                 {{ form.hidden_tag() }}
@@ -17,12 +41,15 @@
                 </div>
                 {{ form.submit }}
             </form>
+            <p></p>
             {% if current_user.username %}
                 <h6>Вы записаны на следующее время:</h6>
             {% endif %}
+            <ul class="list-group">
             {% for record in records %}
-                <ul>{{ record.start_time }}</ul>
+                <li class="list-group-item">{{ record.start_time }}</li>
             {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}

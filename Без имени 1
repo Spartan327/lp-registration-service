@@ -1,3 +1,5 @@
+export FLASK_APP=app && export FLASK_ENV=development
+
 Выполните следующие команды для linux
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 перезапустите терминал, возможно потребуется перезагрузить компьютер

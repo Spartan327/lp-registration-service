@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user, log
 
 from app.forms import LoginForm, FilterForm, ChooseRecordForm
 from app.models import db, Client, Schedule, Record, Correction
+from app.date_cheker import get_current_month
 
 
 def create_app():
@@ -22,19 +23,69 @@ def create_app():
     @app.route('/')
     def index():
         filter_form = FilterForm()
+        month = get_current_month()
         if current_user.is_authenticated:
             user_id = Client.query.filter(Client.username == current_user.username).first().id
             records_client = Record.query.filter_by(client_id=user_id).order_by(Record.start_time).all()
-            return render_template('index.html', records=records_client, form=filter_form)
-        return render_template('index.html', form=filter_form)
+            return render_template('index.html', records=records_client, form=filter_form, month=month, current_date=datetime.now().date())
+        return render_template('index.html', form=filter_form, month=month, current_date=datetime.now().date())
 
-    @app.route('/check-date', methods=['POST'])
+    @app.route('/check-date', methods=['GET', 'POST'])
     def check_date():
-        form = FilterForm()
         formbtn = ChooseRecordForm()
-        if form.validate_on_submit():
-            date = request.form['date']
-            date = datetime.strptime(date, '%Y-%m-%d')
+        if request.method == 'POST':
+            form = FilterForm()
+            if form.validate_on_submit():
+                date = request.form['date']
+                date = datetime.strptime(date, '%Y-%m-%d')
+                date_corrections = Correction.query.filter(Correction.start_time >= date).\
+                    filter(Correction.start_time <= date + timedelta(days=1)).order_by(Correction.start_time).all()
+                date_schedules = Schedule.query.filter_by(week_day=date.isoweekday()).order_by(Schedule.start_time).all()
+                date_records = Record.query.filter(Record.start_time >= date).\
+                    filter(Record.start_time <= date + timedelta(days=1)).order_by(Record.start_time).all()
+                for date_correction in date_corrections:
+                    shedule_windows_to_remove = 0
+                    remove_shedule_window = None
+                    for date_schedule in date_schedules:
+                        # Если есть окно для удаления, то удаляем из расписания
+                        if remove_shedule_window:
+                            date_schedules.remove(remove_shedule_window)
+                            remove_shedule_window = None
+                        # Сравниваем корректировку с расписанием
+                        if date_schedule.get_time() <= date_correction.get_start_time() < date_schedule.get_time_with_duration():
+                            if date_correction.duration % date_schedule.duration == 0:
+                                shedule_windows_to_remove = date_correction.duration / date_schedule.duration
+                            else:
+                                shedule_windows_to_remove = (date_correction.duration // date_schedule.duration) + 1
+                        # счетчик удаления окон в расписании
+                        if shedule_windows_to_remove > 0:
+                            remove_shedule_window = date_schedule
+                            shedule_windows_to_remove -= 1
+                for date_record in date_records:
+                    remove_shedule_window = None
+                    for date_schedule in date_schedules:
+                        if remove_shedule_window:
+                            date_schedules.remove(remove_shedule_window)
+                            print(remove_shedule_window.get_time())
+                            remove_shedule_window = None
+                        if date_schedule.get_time() == date_record.start_time.time():
+                            remove_shedule_window = date_schedule
+                            print(remove_shedule_window)
+                    if remove_shedule_window:
+                            date_schedules.remove(remove_shedule_window)
+                            print(remove_shedule_window.get_time())
+                            remove_shedule_window = None
+                return render_template(
+                    'check_date.html',
+                    date_schedules=date_schedules,
+                    date_corrections=date_corrections,
+                    date=date,
+                    date_records=date_records,
+                    form=formbtn
+                    )
+        if request.method == 'GET':
+            choose_day = request.args.get('day')
+            date = datetime.strptime(choose_day, '%Y-%m-%d')
             date_corrections = Correction.query.filter(Correction.start_time >= date).\
                 filter(Correction.start_time <= date + timedelta(days=1)).order_by(Correction.start_time).all()
             date_schedules = Schedule.query.filter_by(week_day=date.isoweekday()).order_by(Schedule.start_time).all()
@@ -58,7 +109,6 @@ def create_app():
                     if shedule_windows_to_remove > 0:
                         remove_shedule_window = date_schedule
                         shedule_windows_to_remove -= 1
-
             for date_record in date_records:
                 remove_shedule_window = None
                 for date_schedule in date_schedules:
@@ -68,6 +118,11 @@ def create_app():
                         remove_shedule_window = None
                     if date_schedule.get_time() == date_record.start_time.time():
                         remove_shedule_window = date_schedule
+                        print(remove_shedule_window)
+                if remove_shedule_window:
+                        date_schedules.remove(remove_shedule_window)
+                        print(remove_shedule_window.get_time())
+                        remove_shedule_window = None
             return render_template(
                 'check_date.html',
                 date_schedules=date_schedules,
@@ -129,7 +184,7 @@ def create_app():
     @app.route('/logout')
     def logout():
         logout_user()
-        flash('Вы успешно разлогинились')
+        flash('Вы разлогинились')
         return redirect(url_for('index'))
 
     return app
